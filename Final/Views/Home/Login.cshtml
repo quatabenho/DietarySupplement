@@ -1,0 +1,38 @@
+﻿@model Final.Context.user
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Login</h2>
+
+<div class="row justify-content-md-center">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.users_email)
+                        @Html.TextBoxFor(m => m.users_email, "", new { @class = "form-control", @placeholder = "Username" })
+                        @Html.ValidationMessageFor(m => m.users_email)
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.users_password)
+                        @Html.PasswordFor(m => m.users_password, new { @class = "form-control", @placeholder = "Password" })
+                        @Html.ValidationMessageFor(m => m.users_password)
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="submit" class="btn btn-primary" value="Login" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

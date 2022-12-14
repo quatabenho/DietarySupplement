@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Final_ProjectModelStoreContainer" CdmEntityContainer="Final_ProjectEntities1">
+    <EntitySetMapping Name="products">
+      <EntityTypeMapping TypeName="IsTypeOf(Final_ProjectModel.product)">
+        <MappingFragment StoreEntitySet="products">
+          <ScalarProperty Name="pd_id" ColumnName="pd_id" />
+          <ScalarProperty Name="pd_name" ColumnName="pd_name" />
+          <ScalarProperty Name="pd_detail" ColumnName="pd_detail" />
+          <ScalarProperty Name="pd_price" ColumnName="pd_price" />
+          <ScalarProperty Name="qty" ColumnName="qty" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="pd_image" ColumnName="pd_image" />
+          <ScalarProperty Name="pd_added" ColumnName="pd_added" />
+          <ScalarProperty Name="pd_imagePath" ColumnName="pd_imagePath" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="IsTypeOf(Final_ProjectModel.user)">
+        <MappingFragment StoreEntitySet="users">
+          <ScalarProperty Name="users_id" ColumnName="users_id" />
+          <ScalarProperty Name="users_password" ColumnName="users_password" />
+          <ScalarProperty Name="users_email" ColumnName="users_email" />
+          <ScalarProperty Name="users_fullname" ColumnName="users_fullname" />
+          <ScalarProperty Name="users_phone" ColumnName="users_phone" />
+          <ScalarProperty Name="users_gender" ColumnName="users_gender" />
+          <ScalarProperty Name="users_birthday" ColumnName="users_birthday" />
+          <ScalarProperty Name="role_id" ColumnName="role_id" />
+          <ScalarProperty Name="status" ColumnName="status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vouchers">
+      <EntityTypeMapping TypeName="Final_ProjectModel.voucher">
+        <MappingFragment StoreEntitySet="vouchers">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="voucher_price" ColumnName="voucher_price" />
+          <ScalarProperty Name="voucher_code" ColumnName="voucher_code" />
+          <ScalarProperty Name="voucher_id" ColumnName="voucher_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="shippings">
+      <EntityTypeMapping TypeName="Final_ProjectModel.shipping">
+        <MappingFragment StoreEntitySet="shipping">
+          <ScalarProperty Name="total_price" ColumnName="total_price" />
+          <ScalarProperty Name="shipping_created" ColumnName="shipping_created" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="users_id" ColumnName="users_id" />
+          <ScalarProperty Name="shipping_id" ColumnName="shipping_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="orders">
+      <EntityTypeMapping TypeName="Final_ProjectModel.order">
+        <MappingFragment StoreEntitySet="orders">
+          <ScalarProperty Name="order_created" ColumnName="order_created" />
+          <ScalarProperty Name="QuantitySale" ColumnName="QuantitySale" />
+          <ScalarProperty Name="UnitPriceSale" ColumnName="UnitPriceSale" />
+          <ScalarProperty Name="voucher_id" ColumnName="voucher_id" />
+          <ScalarProperty Name="pd_id" ColumnName="pd_id" />
+          <ScalarProperty Name="shipping_id" ColumnName="shipping_id" />
+          <ScalarProperty Name="order_id" ColumnName="order_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

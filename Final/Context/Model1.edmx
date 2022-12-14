@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Final_ProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="orders">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="shipping_id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="pd_id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="voucher_id" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="UnitPriceSale" Type="float" />
+          <Property Name="QuantitySale" Type="float" />
+          <Property Name="order_created" Type="datetime" />
+        </EntityType>
+        <EntityType Name="products">
+          <Key>
+            <PropertyRef Name="pd_id" />
+          </Key>
+          <Property Name="pd_id" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pd_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="pd_detail" Type="nvarchar" MaxLength="4000" />
+          <Property Name="pd_price" Type="float" />
+          <Property Name="qty" Type="int" />
+          <Property Name="status" Type="int" />
+          <Property Name="pd_image" Type="image" />
+          <Property Name="pd_added" Type="datetime" />
+          <Property Name="pd_imagePath" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="shipping">
+          <Key>
+            <PropertyRef Name="shipping_id" />
+          </Key>
+          <Property Name="shipping_id" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="users_id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="address" Type="nvarchar" MaxLength="2000" Nullable="false" />
+          <Property Name="shipping_created" Type="datetime" />
+          <Property Name="total_price" Type="float" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="users_id" />
+          </Key>
+          <Property Name="users_id" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="users_password" Type="nvarchar" MaxLength="255" />
+          <Property Name="users_email" Type="nvarchar" MaxLength="255" />
+          <Property Name="users_fullname" Type="nvarchar" MaxLength="255" />
+          <Property Name="users_phone" Type="nvarchar" MaxLength="255" />
+          <Property Name="users_gender" Type="int" />
+          <Property Name="users_birthday" Type="datetime" />
+          <Property Name="role_id" Type="int" />
+          <Property Name="status" Type="int" />
+        </EntityType>
+        <EntityType Name="vouchers">
+          <Key>
+            <PropertyRef Name="voucher_id" />
+          </Key>
+          <Property Name="voucher_id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="voucher_code" Type="varchar" MaxLength="255" />
+          <Property Name="voucher_price" Type="float" />
+          <Property Name="status" Type="int" />
+        </EntityType>
+        <Association Name="FK_ProductOrder">
+          <End Role="products" Type="Self.products" Multiplicity="1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="products">
+              <PropertyRef Name="pd_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="pd_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShipOrder">
+          <End Role="shipping" Type="Self.shipping" Multiplicity="1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shipping">
+              <PropertyRef Name="shipping_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="shipping_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShipUser">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="shipping" Type="Self.shipping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="users_id" />
+            </Principal>
+            <Dependent Role="shipping">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VoucherOrder">
+          <End Role="vouchers" Type="Self.vouchers" Multiplicity="0..1" />
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="vouchers">
+              <PropertyRef Name="voucher_id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="voucher_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Final_ProjectModelStoreContainer">
+          <EntitySet Name="orders" EntityType="Self.orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="products" EntityType="Self.products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="shipping" EntityType="Self.shipping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vouchers" EntityType="Self.vouchers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ProductOrder" Association="Self.FK_ProductOrder">
+            <End Role="products" EntitySet="products" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShipOrder" Association="Self.FK_ShipOrder">
+            <End Role="shipping" EntitySet="shipping" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShipUser" Association="Self.FK_ShipUser">
+            <End Role="users" EntitySet="users" />
+            <End Role="shipping" EntitySet="shipping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VoucherOrder" Association="Self.FK_VoucherOrder">
+            <End Role="vouchers" EntitySet="vouchers" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Final_ProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="pd_id" />
+          </Key>
+          <Property Name="pd_id" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="pd_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="pd_detail" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="pd_price" Type="Double" />
+          <Property Name="qty" Type="Int32" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="pd_image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="pd_added" Type="DateTime" Precision="3" />
+          <Property Name="pd_imagePath" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="orders" Relationship="Final_ProjectModel.FK_ProductOrder" FromRole="product" ToRole="order" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="users_id" />
+          </Key>
+          <Property Name="users_id" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="users_password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="users_email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="users_fullname" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="users_phone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="users_gender" Type="Int32" />
+          <Property Name="users_birthday" Type="DateTime" Precision="3" />
+          <Property Name="role_id" Type="Int32" />
+          <Property Name="status" Type="Int32" />
+          <NavigationProperty Name="shippings" Relationship="Final_ProjectModel.FK_ShipUser" FromRole="user" ToRole="shipping" />
+        </EntityType>
+        <EntityContainer Name="Final_ProjectEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="products" EntityType="Self.product" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <EntitySet Name="vouchers" EntityType="Final_ProjectModel.voucher" />
+          <EntitySet Name="shippings" EntityType="Final_ProjectModel.shipping" />
+          <AssociationSet Name="FK_ShipUser" Association="Final_ProjectModel.FK_ShipUser">
+            <End Role="user" EntitySet="users" />
+            <End Role="shipping" EntitySet="shippings" />
+          </AssociationSet>
+          <EntitySet Name="orders" EntityType="Final_ProjectModel.order" />
+          <AssociationSet Name="FK_ProductOrder" Association="Final_ProjectModel.FK_ProductOrder">
+            <End Role="product" EntitySet="products" />
+            <End Role="order" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShipOrder" Association="Final_ProjectModel.FK_ShipOrder">
+            <End Role="shipping" EntitySet="shippings" />
+            <End Role="order" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VoucherOrder" Association="Final_ProjectModel.FK_VoucherOrder">
+            <End Role="voucher" EntitySet="vouchers" />
+            <End Role="order" EntitySet="orders" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="voucher">
+          <Key>
+            <PropertyRef Name="voucher_id" />
+          </Key>
+          <Property Name="voucher_id" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="voucher_code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="voucher_price" Type="Double" />
+          <Property Name="status" Type="Int32" />
+          <NavigationProperty Name="orders" Relationship="Final_ProjectModel.FK_VoucherOrder" FromRole="voucher" ToRole="order" />
+        </EntityType>
+        <EntityType Name="shipping">
+          <Key>
+            <PropertyRef Name="shipping_id" />
+          </Key>
+          <Property Name="shipping_id" Type="Decimal" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="users_id" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="address" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="user" Relationship="Final_ProjectModel.FK_ShipUser" FromRole="shipping" ToRole="user" />
+          <Property Name="shipping_created" Type="DateTime" Precision="3" />
+          <Property Name="total_price" Type="Double" />
+          <NavigationProperty Name="orders" Relationship="Final_ProjectModel.FK_ShipOrder" FromRole="shipping" ToRole="order" />
+        </EntityType>
+        <Association Name="FK_ShipUser">
+          <End Type="Final_ProjectModel.user" Role="user" Multiplicity="1" />
+          <End Type="Final_ProjectModel.shipping" Role="shipping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="users_id" />
+            </Principal>
+            <Dependent Role="shipping">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="order">
+          <Key>
+            <PropertyRef Name="order_id" />
+          </Key>
+          <Property Name="order_id" Type="Decimal" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="shipping_id" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="pd_id" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="voucher_id" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="UnitPriceSale" Type="Double" />
+          <Property Name="QuantitySale" Type="Double" />
+          <Property Name="order_created" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="product" Relationship="Final_ProjectModel.FK_ProductOrder" FromRole="order" ToRole="product" />
+          <NavigationProperty Name="shipping" Relationship="Final_ProjectModel.FK_ShipOrder" FromRole="order" ToRole="shipping" />
+          <NavigationProperty Name="voucher" Relationship="Final_ProjectModel.FK_VoucherOrder" FromRole="order" ToRole="voucher" />
+        </EntityType>
+        <Association Name="FK_ProductOrder">
+          <End Type="Final_ProjectModel.product" Role="product" Multiplicity="1" />
+          <End Type="Final_ProjectModel.order" Role="order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="pd_id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="pd_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShipOrder">
+          <End Type="Final_ProjectModel.shipping" Role="shipping" Multiplicity="1" />
+          <End Type="Final_ProjectModel.order" Role="order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shipping">
+              <PropertyRef Name="shipping_id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="shipping_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VoucherOrder">
+          <End Type="Final_ProjectModel.voucher" Role="voucher" Multiplicity="0..1" />
+          <End Type="Final_ProjectModel.order" Role="order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="voucher">
+              <PropertyRef Name="voucher_id" />
+            </Principal>
+            <Dependent Role="order">
+              <PropertyRef Name="voucher_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Final_ProjectModelStoreContainer" CdmEntityContainer="Final_ProjectEntities1">
+    <EntitySetMapping Name="products">
+      <EntityTypeMapping TypeName="IsTypeOf(Final_ProjectModel.product)">
+        <MappingFragment StoreEntitySet="products">
+          <ScalarProperty Name="pd_id" ColumnName="pd_id" />
+          <ScalarProperty Name="pd_name" ColumnName="pd_name" />
+          <ScalarProperty Name="pd_detail" ColumnName="pd_detail" />
+          <ScalarProperty Name="pd_price" ColumnName="pd_price" />
+          <ScalarProperty Name="qty" ColumnName="qty" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="pd_image" ColumnName="pd_image" />
+          <ScalarProperty Name="pd_added" ColumnName="pd_added" />
+          <ScalarProperty Name="pd_imagePath" ColumnName="pd_imagePath" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="IsTypeOf(Final_ProjectModel.user)">
+        <MappingFragment StoreEntitySet="users">
+          <ScalarProperty Name="users_id" ColumnName="users_id" />
+          <ScalarProperty Name="users_password" ColumnName="users_password" />
+          <ScalarProperty Name="users_email" ColumnName="users_email" />
+          <ScalarProperty Name="users_fullname" ColumnName="users_fullname" />
+          <ScalarProperty Name="users_phone" ColumnName="users_phone" />
+          <ScalarProperty Name="users_gender" ColumnName="users_gender" />
+          <ScalarProperty Name="users_birthday" ColumnName="users_birthday" />
+          <ScalarProperty Name="role_id" ColumnName="role_id" />
+          <ScalarProperty Name="status" ColumnName="status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+          <EntitySetMapping Name="vouchers">
+            <EntityTypeMapping TypeName="Final_ProjectModel.voucher">
+              <MappingFragment StoreEntitySet="vouchers">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="voucher_price" ColumnName="voucher_price" />
+                <ScalarProperty Name="voucher_code" ColumnName="voucher_code" />
+                <ScalarProperty Name="voucher_id" ColumnName="voucher_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="shippings">
+            <EntityTypeMapping TypeName="Final_ProjectModel.shipping">
+              <MappingFragment StoreEntitySet="shipping">
+                <ScalarProperty Name="total_price" ColumnName="total_price" />
+                <ScalarProperty Name="shipping_created" ColumnName="shipping_created" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="users_id" ColumnName="users_id" />
+                <ScalarProperty Name="shipping_id" ColumnName="shipping_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orders">
+            <EntityTypeMapping TypeName="Final_ProjectModel.order">
+              <MappingFragment StoreEntitySet="orders">
+                <ScalarProperty Name="order_created" ColumnName="order_created" />
+                <ScalarProperty Name="QuantitySale" ColumnName="QuantitySale" />
+                <ScalarProperty Name="UnitPriceSale" ColumnName="UnitPriceSale" />
+                <ScalarProperty Name="voucher_id" ColumnName="voucher_id" />
+                <ScalarProperty Name="pd_id" ColumnName="pd_id" />
+                <ScalarProperty Name="shipping_id" ColumnName="shipping_id" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

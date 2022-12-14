@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Final_ProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="orders">
+    <Key>
+      <PropertyRef Name="order_id" />
+    </Key>
+    <Property Name="order_id" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="shipping_id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="pd_id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="voucher_id" Type="numeric" Precision="18" Scale="0" />
+    <Property Name="UnitPriceSale" Type="float" />
+    <Property Name="QuantitySale" Type="float" />
+    <Property Name="order_created" Type="datetime" />
+  </EntityType>
+  <EntityType Name="products">
+    <Key>
+      <PropertyRef Name="pd_id" />
+    </Key>
+    <Property Name="pd_id" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="pd_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="pd_detail" Type="nvarchar" MaxLength="4000" />
+    <Property Name="pd_price" Type="float" />
+    <Property Name="qty" Type="int" />
+    <Property Name="status" Type="int" />
+    <Property Name="pd_image" Type="image" />
+    <Property Name="pd_added" Type="datetime" />
+    <Property Name="pd_imagePath" Type="nvarchar" MaxLength="1000" />
+  </EntityType>
+  <EntityType Name="shipping">
+    <Key>
+      <PropertyRef Name="shipping_id" />
+    </Key>
+    <Property Name="shipping_id" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="users_id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="address" Type="nvarchar" MaxLength="2000" Nullable="false" />
+    <Property Name="shipping_created" Type="datetime" />
+    <Property Name="total_price" Type="float" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="users_id" />
+    </Key>
+    <Property Name="users_id" Type="numeric" Precision="18" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="users_password" Type="nvarchar" MaxLength="255" />
+    <Property Name="users_email" Type="nvarchar" MaxLength="255" />
+    <Property Name="users_fullname" Type="nvarchar" MaxLength="255" />
+    <Property Name="users_phone" Type="nvarchar" MaxLength="255" />
+    <Property Name="users_gender" Type="int" />
+    <Property Name="users_birthday" Type="datetime" />
+    <Property Name="role_id" Type="int" />
+    <Property Name="status" Type="int" />
+  </EntityType>
+  <EntityType Name="vouchers">
+    <Key>
+      <PropertyRef Name="voucher_id" />
+    </Key>
+    <Property Name="voucher_id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="voucher_code" Type="varchar" MaxLength="255" />
+    <Property Name="voucher_price" Type="float" />
+    <Property Name="status" Type="int" />
+  </EntityType>
+  <Association Name="FK_ProductOrder">
+    <End Role="products" Type="Self.products" Multiplicity="1" />
+    <End Role="orders" Type="Self.orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="pd_id" />
+      </Principal>
+      <Dependent Role="orders">
+        <PropertyRef Name="pd_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ShipOrder">
+    <End Role="shipping" Type="Self.shipping" Multiplicity="1" />
+    <End Role="orders" Type="Self.orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="shipping">
+        <PropertyRef Name="shipping_id" />
+      </Principal>
+      <Dependent Role="orders">
+        <PropertyRef Name="shipping_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ShipUser">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="shipping" Type="Self.shipping" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="users_id" />
+      </Principal>
+      <Dependent Role="shipping">
+        <PropertyRef Name="users_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VoucherOrder">
+    <End Role="vouchers" Type="Self.vouchers" Multiplicity="0..1" />
+    <End Role="orders" Type="Self.orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="vouchers">
+        <PropertyRef Name="voucher_id" />
+      </Principal>
+      <Dependent Role="orders">
+        <PropertyRef Name="voucher_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Final_ProjectModelStoreContainer">
+    <EntitySet Name="orders" EntityType="Self.orders" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="products" EntityType="Self.products" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="shipping" EntityType="Self.shipping" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vouchers" EntityType="Self.vouchers" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ProductOrder" Association="Self.FK_ProductOrder">
+      <End Role="products" EntitySet="products" />
+      <End Role="orders" EntitySet="orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ShipOrder" Association="Self.FK_ShipOrder">
+      <End Role="shipping" EntitySet="shipping" />
+      <End Role="orders" EntitySet="orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ShipUser" Association="Self.FK_ShipUser">
+      <End Role="users" EntitySet="users" />
+      <End Role="shipping" EntitySet="shipping" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VoucherOrder" Association="Self.FK_VoucherOrder">
+      <End Role="vouchers" EntitySet="vouchers" />
+      <End Role="orders" EntitySet="orders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

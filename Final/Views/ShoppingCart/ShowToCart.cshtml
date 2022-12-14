@@ -1,0 +1,90 @@
+﻿@model Final.Context.Cart
+
+@{
+    ViewBag.Title = "Your Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Your Cart</h2>
+
+@if (Model != null)
+{
+    <a href="@Url.Action("Index", "Home")" class="btn btn-info">Keep buying</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product name</th>
+                <th>Product picture</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                double total = Convert.ToDouble(item.shopping_product.pd_price.Value * item.shopping_quantity);
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.shopping_product.pd_name)
+                    </td>
+                    @{
+                        var base64 = Convert.ToBase64String(item.shopping_product.pd_image);
+                        var imgsrc = string.Format("data:image/png;base64, {0}", base64);
+                    }
+                    <td>
+                        <img src="@imgsrc" style="width: 100px; height: 100px;">
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.shopping_product.pd_price)
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("Update_Qty", "ShoppingCart"))
+                        {
+                            <input type="hidden" value="@item.shopping_product.pd_id" name="ID_Product" />
+                            <input type="number" value="@item.shopping_quantity" min="1" name="Quantity" />
+                            <input type="submit" value="Update" />
+                        }
+                    </td>
+                    <td>
+                        @total $
+                    </td>
+                    <td>
+                        <a href="/ShoppingCart/RemoveItem/@item.shopping_product.pd_id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+        <td colspan="5" style="text-align: right; font-weight: bolder">Total Price: @Model.Total_Price() $</td>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4" style="text-align: center;">
+                    @using (Html.BeginForm("Payment", "ShoppingCart"))
+                    {
+                        <table style="border-collapse: separate; border-spacing:5px;">
+                            <tr>
+                                <td>Customer ID</td>
+                                <td><input type="number" name="UserId" value="@Session["idUser"]" readonly="readonly" /></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td><input type="text" name="User_Address" value="" required /></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><input type="submit" value="Purchase" class="btn btn-success" /></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    }
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+}
+
+
